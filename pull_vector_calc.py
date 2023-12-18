@@ -137,12 +137,11 @@ def pv(path, leading_pt_cut, subleading_pt_cut, leading_eta_cut, eta_cut_key):
         
         
         delta_y_leading = y_dau_gen_leading-y_jet_gen_leading
-        delta_phi_leading = dau_phi_gen_leading[dau]-jet_phi_gen_leading
+        delta_phi_leading = np.arcsin(np.sin(dau_phi_gen_leading[dau]-jet_phi_gen_leading))
         
-        delta_phi_mask = abs(delta_phi_leading)< 0.7
         
         delta_y_subleading = y_dau_gen_subleading-y_jet_gen_subleading
-        delta_phi_subleading = dau_phi_gen_subleading[dau]-jet_phi_gen_subleading
+        delta_phi_subleading = np.arcsin(np.sin(dau_phi_gen_subleading[dau]-jet_phi_gen_subleading))
         
         
         r_vec_leading = vector.array({
@@ -160,8 +159,7 @@ def pv(path, leading_pt_cut, subleading_pt_cut, leading_eta_cut, eta_cut_key):
         
         kappa_vec_leading = dau_pt_complete_gen_leading*abs_r_leading
         
-        if dau == 0:
-            gamma = kappa_vec_leading
+       
         
         sum_phi_leading += kappa_vec_leading*delta_phi_leading
         sum_y_leading += kappa_vec_leading*delta_y_leading
@@ -180,20 +178,20 @@ def pv(path, leading_pt_cut, subleading_pt_cut, leading_eta_cut, eta_cut_key):
     pull_vector_y_subleading = sum_y_subleading/jet_pt_gen_subleading
     pull_vector_phi_subleading = sum_phi_subleading/jet_pt_gen_subleading
     
-    x=[jet_phi_gen_leading,sum_y_leading,sum_phi_leading,delta_phi_mask]   #put here every variable that you want to be outputted
+    x=[jet_phi_gen_leading,sum_y_leading,sum_phi_leading]   #put here every variable that you want to be outputted
         
     return pull_vector_y_leading,pull_vector_phi_leading,pull_vector_y_subleading,pull_vector_phi_subleading, x
 
-vbf_path = 'perfNano_VBFHInv_PU200.l1ctlayer1.root'
-qcd_path = 'perfNano_QCD_PU200.l1ctlayer1.root'
+# vbf_path = 'perfNano_VBFHInv_PU200.l1ctlayer1.root'
+# qcd_path = 'perfNano_QCD_PU200.l1ctlayer1.root'
 
 
-vbf_pv_y_leading, vbf_pv_phi_leading, vbf_pv_y_subleading, vbf_pv_phi_subleading, x = pv(vbf_path,20,0,0,0)
+# vbf_pv_y_leading, vbf_pv_phi_leading, vbf_pv_y_subleading, vbf_pv_phi_subleading, x = pv(vbf_path,20,0,0,0)
 
-print(x[0])
-print(x[1])
-print(x[2])
+# print(x[0])
+# print(x[1])
+# print(x[2])
 
 
-plt.hist([x[1],x[2]],bins = 100, histtype='step', color = ['black','red'])
-plt.yscale('log')
+# plt.hist([x[1],x[2]],bins = 100, histtype='step', color = ['black','red'])
+# plt.yscale('log')

@@ -64,13 +64,18 @@ qcd_pv_magnitude_subleading = qcd_pv_subleading.rho
 fig,ax = plt.subplots()
 
 
-hist(ax,[vbf_pa_leading,qcd_pa_leading],2,100,True,['black','red'],['VBF pull angle leading','QCD pull angle leading'] ,x_scale_log = False, y_scale_log = False )
+hist(ax,[vbf_pa_leading,qcd_pa_leading],2,10,True,['black','red'],['VBF pull angle leading','QCD pull angle leading'] ,x_scale_log = False, y_scale_log = False )
 
 plt.show()
 
 
 
+fig,ax = plt.subplots()
 
+
+hist(ax,[vbf_pa_subleading,qcd_pa_subleading],2,10,True,['black','red'],['VBF pull angle subleading','QCD pull angle subleading'] ,x_scale_log = False, y_scale_log = False )
+
+plt.show()
 
 
 
