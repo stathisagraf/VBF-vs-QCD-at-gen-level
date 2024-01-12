@@ -20,13 +20,21 @@ def hist(ax,data,len_data, bins, density, color, label,y_scale_log = False, x_sc
     if x_scale_log == True:
         ax.set_xscale('log')
     
-    
-    for i in range(len_data):
+    if len_data!=1:
+        
+        for i in range(len_data):
+            if density ==True:
+                plt.errorbar(bin_centers, h[0][i], yerr=np.sqrt(h[0][i]/(bin_width*len(data[i]))), fmt='none', linewidth=1, color=color[i],capsize=2)
+                
+            if density==False:
+                plt.errorbar(bin_centers, h[0][i], yerr=np.sqrt(h[0][i]), fmt='none', linewidth=1, color=color[i],capsize=2)
+    if len_data == 1:
         if density ==True:
-            plt.errorbar(bin_centers, h[0][i], yerr=np.sqrt(h[0][i]/(bin_width*len(data[i]))), fmt='none', linewidth=1, color=color[i],capsize=2)
+            plt.errorbar(bin_centers, h[0], yerr=np.sqrt(h[0]/(bin_width*len(data))), fmt='none', linewidth=1, color=color,capsize=2)
             
         if density==False:
-            plt.errorbar(bin_centers, h[0][i], yerr=np.sqrt(h[0][i]), fmt='none', linewidth=1, color=color[i],capsize=2)
+            plt.errorbar(bin_centers, h[0], yerr=np.sqrt(h[0]), fmt='none', linewidth=1, color=color,capsize=2)
+        
     return h  
 
 

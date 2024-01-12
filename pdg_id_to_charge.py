@@ -14,9 +14,9 @@ data = uproot.open(vbf_path)
 cha = []
 for dau in range(5):
 
-    cha.append(data['Events']['GenJets_dau{}_pdgId'.format(dau)].array())
+    cha.append(ak.flatten(data['Events']['GenJets_dau{}_pdgId'.format(dau)].array()))
 
 
-count = Counter(ak.flatten(ak.flatten(cha)))
+count = Counter((ak.flatten(cha)))
 
 print(count)

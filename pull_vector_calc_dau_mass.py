@@ -15,7 +15,7 @@ def y(pt, eta, m):
 
 
 #the eta cut key differentiates the following cases: eta_cut_key==0 no eta cuts,  eta_cut_key==1 endcap region, eta_cut_key==-1 barrel region
-def pv(path, leading_pt_cut, subleading_pt_cut, leading_eta_cut, eta_cut_key, dau_pt_cuts = 0):
+def pv_dau_mass(path, leading_pt_cut, subleading_pt_cut, leading_eta_cut, eta_cut_key, dau_pt_cuts = 0, dau_mass_cuts = 0):
     
         
     data=uproot.open(path)
@@ -115,24 +115,47 @@ def pv(path, leading_pt_cut, subleading_pt_cut, leading_eta_cut, eta_cut_key, da
     sum_y_subleading = 0 
     sum_phi_subleading = 0
     
+    leading_mass_daus_number=[]
+    s=[0]*len(dau_mass_gen_leading[0])
+    
+    subleading_mass_daus_number=[]
+    s_subl=[0]*len(dau_mass_gen_subleading[0])
+    
+    
     for dau in range(32):
         
+        ntrue_dau_gen_leading_mass=dau_mass_gen_leading[dau] < dau_mass_cuts
+        ntrue_dau_gen_subleading_mass=dau_mass_gen_subleading[dau] < dau_mass_cuts
+      
         ntrue_dau_gen_leading=dau_pt_gen_leading[dau] < dau_pt_cuts
         
     
-        dau_mask_pt_gen_leading=ma.masked_array(dau_pt_gen_leading[dau],mask=[ntrue_dau_gen_leading])
+        dau_mask_pt_gen_leading=ma.masked_array(dau_pt_gen_leading[dau],mask=[ntrue_dau_gen_leading+ntrue_dau_gen_leading_mass])
         dau_pt_complete_gen_leading=dau_mask_pt_gen_leading.filled(0)
         
         
         ntrue_dau_gen_subleading=dau_pt_gen_subleading[dau] < dau_pt_cuts
         
     
-        dau_mask_pt_gen_subleading=ma.masked_array(dau_pt_gen_subleading[dau],mask=[ntrue_dau_gen_subleading])
+        dau_mask_pt_gen_subleading=ma.masked_array(dau_pt_gen_subleading[dau],mask=[ntrue_dau_gen_subleading+ntrue_dau_gen_subleading_mass])
         dau_pt_complete_gen_subleading=dau_mask_pt_gen_subleading.filled(0)
+        
+        
+        leading_mass_daus_number.append((~ntrue_dau_gen_leading_mass).astype(int))
+        
+        s+=leading_mass_daus_number[dau]
+        
+        subleading_mass_daus_number.append((~ntrue_dau_gen_subleading_mass).astype(int))
+        
+        s_subl+=subleading_mass_daus_number[dau]
+        
+    
+        
+        
        
         if dau == 1:
-            leading_dau_mask = ~ntrue_dau_gen_leading
-            subleading_dau_mask = ~ntrue_dau_gen_subleading
+            leading_dau_mask = ~(ntrue_dau_gen_leading+ntrue_dau_gen_leading_mass)
+            subleading_dau_mask = ~(ntrue_dau_gen_subleading+ntrue_dau_gen_subleading_mass)
         
         y_dau_gen_leading = y(dau_pt_complete_gen_leading, dau_eta_gen_leading[dau], dau_mass_gen_leading[dau])
         y_dau_gen_subleading = y(dau_pt_complete_gen_subleading, dau_eta_gen_subleading[dau], dau_mass_gen_subleading[dau])
@@ -172,7 +195,9 @@ def pv(path, leading_pt_cut, subleading_pt_cut, leading_eta_cut, eta_cut_key, da
         sum_y_subleading += kappa_vec_subleading*delta_y_subleading
         sum_phi_subleading += kappa_vec_subleading*delta_phi_subleading
         
-        
+    leading_mass_mask = s >= 2
+    
+    subleading_mass_mask = s_subl >=2
         
     pull_vector_y_leading = sum_y_leading/jet_pt_gen_leading
     pull_vector_phi_leading = sum_phi_leading/jet_pt_gen_leading
@@ -180,15 +205,15 @@ def pv(path, leading_pt_cut, subleading_pt_cut, leading_eta_cut, eta_cut_key, da
     pull_vector_y_subleading = sum_y_subleading/jet_pt_gen_subleading
     pull_vector_phi_subleading = sum_phi_subleading/jet_pt_gen_subleading
     
-    x=[jet_phi_gen_leading,sum_y_leading,sum_phi_leading]   #put here every variable that you want to be outputted
+    x=[s,leading_mass_daus_number,leading_mass_mask]   #put here every variable that you want to be outputted
         
-    return pull_vector_y_leading[leading_dau_mask],pull_vector_phi_leading[leading_dau_mask],pull_vector_y_subleading[subleading_dau_mask],pull_vector_phi_subleading[subleading_dau_mask], x
+    return pull_vector_y_leading[leading_dau_mask*leading_mass_mask],pull_vector_phi_leading[leading_dau_mask*leading_mass_mask],pull_vector_y_subleading[subleading_dau_mask*subleading_mass_mask],pull_vector_phi_subleading[subleading_dau_mask*subleading_mass_mask], x
 
-# vbf_path = 'perfNano_VBFHInv_PU200.l1ctlayer1.root'
-# qcd_path = 'perfNano_QCD_PU200.l1ctlayer1.root'
+vbf_path = 'perfNano_VBFHInv_PU200.l1ctlayer1.root'
+qcd_path = 'perfNano_QCD_PU200.l1ctlayer1.root'
 
 
-# vbf_pv_y_leading, vbf_pv_phi_leading, vbf_pv_y_subleading, vbf_pv_phi_subleading, x = pv(vbf_path,20,0,0,0)
+vbf_pv_y_leading, vbf_pv_phi_leading, vbf_pv_y_subleading, vbf_pv_phi_subleading, x = pv_dau_mass(vbf_path,20,0,0,0, dau_mass_cuts = 0.5)
 
 # print(x[0])
 # print(x[1])
