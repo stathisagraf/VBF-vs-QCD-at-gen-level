@@ -49,7 +49,7 @@ def pv_dau_mass(path, leading_pt_cut, subleading_pt_cut, leading_eta_cut, eta_cu
    
     jet_pt_mask_leading = ak.flatten(data['Events']['GenJets_pt'].array()[nonzero_gen][leading_gen]>leading_pt_cut)
     jet_pt_mask_subleading = ak.flatten(data['Events']['GenJets_pt'].array()[nonzero_gen][subleading_gen]>subleading_pt_cut)
-    
+    comb_gen_mask =[]
     
     if eta_cut_key==1:
         eta_cut_high = ak.flatten(data['Events']['GenJets_eta'].array()[nonzero_gen][leading_gen]>leading_eta_cut)

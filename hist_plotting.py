@@ -4,7 +4,7 @@ import uproot
 import mplhep as mpl
 
 
-def hist(ax,data,len_data, bins, density, color, label,y_scale_log = False, x_scale_log = False ):
+def hist(ax,data,len_data, bins, density, color, label,y_scale_log = False, x_scale_log = False, legend_font = 11 ):
     
    
     
@@ -12,7 +12,7 @@ def hist(ax,data,len_data, bins, density, color, label,y_scale_log = False, x_sc
     h = ax.hist(data,bins, histtype='step',density = density,color= color, label=label)
     bin_centers = 0.5 * (h[1][:-1] + h[1][1:])
     bin_width = h[1][1]-h[1][0]
-    ax.legend()
+    ax.legend(fontsize = legend_font)
     
     
     if y_scale_log ==True:

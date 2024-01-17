@@ -139,3 +139,32 @@ print(beta[1][1]-beta[1][0])
 plt.title('Delta y between jet axis and daughters (AK4)')
 plt.savefig('/home/stathis/Desktop/Research project/Data/VBF vs QCD at gen/Plots/Delta_y_plot_full_candidates_log_AK4.pdf')
 plt.show()
+
+
+mean_y = np.mean(delta_y)
+std_y = np.std(delta_y)
+mean_eta = np.mean(delta_eta)
+std_eta = np.std(delta_eta)
+
+mean_phi = np.mean(np.arcsin(np.sin(delta_phi)))
+std_phi = np.std(np.arcsin(np.sin(delta_phi)))
+
+
+
+
+fig,ax = plt.subplots()
+beta = hist(ax,[delta_y,np.arcsin(np.sin(delta_phi)),delta_eta],3,51,False,['black','blue','red'],['Δy μ={:.5f}, σ={:.5f}'.format(mean_y,std_y),'Δφ μ={:.5f}, σ={:.5f}'.format(mean_phi,std_phi),'Δη μ={:.5f}, σ={:.5f}'.format(mean_eta,std_eta)],legend_font=8)
+print(beta[1][1]-beta[1][0])
+ax.set_xlim(-0.6,0.6)
+plt.title(r'Combined plot ($\Delta \eta$, $\Delta \phi$, $\Delta y$)  between jet axis and daughters (AK4)')
+plt.savefig('/home/stathis/Desktop/Research project/Data/VBF vs QCD at gen/Plots/Comb_deta_dphi_dy_plot_full_candidates_AK4.pdf')
+plt.show()
+
+
+fig,ax = plt.subplots()
+beta = hist(ax,[delta_y,np.arcsin(np.sin(delta_phi)),delta_eta],3,51,False,['black','blue','red'],['Δy μ={:.5f}, σ={:.5f}'.format(mean_y,std_y),'Δφ μ={:.5f}, σ={:.5f}'.format(mean_phi,std_phi),'Δη μ={:.5f}, σ={:.5f}'.format(mean_eta,std_eta)],y_scale_log=True,legend_font=8)
+print(beta[1][1]-beta[1][0])
+ax.set_xlim(-0.6,0.6)
+plt.title(r'($\Delta \eta$, $\Delta \phi$, $\Delta y$)  between jet axis and daughters (AK4)')
+plt.savefig('/home/stathis/Desktop/Research project/Data/VBF vs QCD at gen/Plots/Comb_deta_dphi_dy_plot_full_candidates_log_AK4.pdf')
+plt.show()
