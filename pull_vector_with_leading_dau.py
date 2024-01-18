@@ -151,7 +151,36 @@ def pv_only_leading(path, leading_pt_cut, subleading_pt_cut, leading_eta_cut, et
     pull_vector_y_subleading = dau_pt_gen_subleading/jet_pt_gen_subleading*abs_r_subleading*delta_y_subleading
     pull_vector_phi_subleading = dau_pt_gen_subleading/jet_pt_gen_subleading*abs_r_subleading*delta_phi_subleading
     
-    x=[delta_y_leading,delta_phi_leading]   #put here every variable that you want to be outputted
+    
+    j_leading=vector.array({
+                        "x" : y_jet_gen_leading,
+                        "y": jet_phi_gen_leading                
+                        })
+    
+    j_subleading=vector.array({
+                        "x" : y_jet_gen_subleading,
+                        "y": jet_phi_gen_subleading 
+                        })
+    
+    pull_vector_leading = vector.array({
+                        "x" : pull_vector_y_leading,
+                        "y": pull_vector_phi_leading
+                        })
+    
+    pull_vector_subleading = vector.array({
+                        "x" : pull_vector_y_subleading,
+                        "y": pull_vector_phi_subleading
+                        })
+    
+    v12 = j_subleading-j_leading
+    v21 = j_leading - j_subleading
+    
+    leading_relative_pa=v12.deltaphi(pull_vector_leading)
+    subleading_relative_pa=v21.deltaphi(pull_vector_subleading)
+    
+    
+    
+    x=[leading_relative_pa,subleading_relative_pa]   #put here every variable that you want to be outputted
         
     return pull_vector_y_leading,pull_vector_phi_leading,pull_vector_y_subleading,pull_vector_phi_subleading, x
 

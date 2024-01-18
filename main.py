@@ -89,6 +89,28 @@ qcd_path = 'perfNano_QCD_PU200.l1ctlayer1.root'
     
 #         plt.show()
         
+        
+#         fig,ax = plt.subplots()
+        
+        
+#         hist(ax,[x[0],z[0]],2,10,True,['black','red'],['VBF relative pull angle leading','QCD relative pull angle leading'] ,x_scale_log = False, y_scale_log = False )
+#         plt.text(-1.8,0.1,r'Leading jet $p_T$ > {} GeV'.format(pt_cut_leading))
+#         plt.text(-1.8,0.08,r'Daughter $p_T$ > {} GeV'.format(dau_cuts_pt))
+#         plt.savefig('/home/stathis/Desktop/Research project/Data/VBF vs QCD at gen/Plots/Leading_Rel_Pull_angle_pt_cut_{}_dau_cuts_{}.pdf'.format(pt_cut_leading,dau_cuts_pt))
+#         plt.show()
+        
+        
+        
+#         fig,ax = plt.subplots()
+        
+        
+#         hist(ax,[x[1],z[1]],2,10,True,['black','red'],['VBF relative pull angle subleading','QCD relative pull angle subleading'] ,x_scale_log = False, y_scale_log = False )
+#         plt.text(-1.8,0.1,r'Leading jet $p_T$ > {} GeV'.format(pt_cut_leading))
+#         plt.text(-1.8,0.08,r'Daughter $p_T$ > {} GeV'.format(dau_cuts_pt))
+#         plt.savefig('/home/stathis/Desktop/Research project/Data/VBF vs QCD at gen/Plots/Subeading_Rel_Pull_angle_pt_cut_{}_dau_cuts_{}.pdf'.format(pt_cut_leading,dau_cuts_pt))
+    
+#         plt.show()
+        
 
     
 # dau_mass_cut_table = [0,0.1,0.11,0.15,0.5]
@@ -390,6 +412,29 @@ for pt_cut_leading in leading_jet_pt_cuts:
     
         plt.show()
 
+
+        fig,ax = plt.subplots()
+        
+        
+        hist(ax,[x[0],z[0]],2,10,True,['black','red'],['VBF relative pull angle leading','QCD relative pull angle leading'] ,x_scale_log = False, y_scale_log = False )
+        plt.text(-1.8,0.1,r'Leading jet $p_T$ > {} GeV'.format(pt_cut_leading))
+        plt.text(-1.8,0.08,r'Only leading daughter')
+        plt.text(-1.8,0.065,r'|$\eta$|>1.4')
+        plt.savefig('/home/stathis/Desktop/Research project/Data/VBF vs QCD at gen/Plots/Leading_Rel_Pull_angle_pt_cut_{}_dau_cuts_{}_leading_dau_forward.pdf'.format(pt_cut_leading,dau_cuts_pt))
+        plt.show()
+        
+        
+        
+        fig,ax = plt.subplots()
+        
+        
+        hist(ax,[x[1],z[1]],2,10,True,['black','red'],['VBF relative pull angle subleading','QCD relative pull angle subleading'] ,x_scale_log = False, y_scale_log = False )
+        plt.text(-1.8,0.1,r'Leading jet $p_T$ > {} GeV'.format(pt_cut_leading))
+        plt.text(-1.8,0.08,r'Only leading daughter')
+        plt.text(-1.8,0.065,r'|$\eta$|>1.4')
+        plt.savefig('/home/stathis/Desktop/Research project/Data/VBF vs QCD at gen/Plots/Subeading_Rel_Pull_angle_pt_cut_{}_dau_cuts_{}_leading_dau_forward.pdf'.format(pt_cut_leading,dau_cuts_pt))
+    
+        plt.show()
 
 
 end = time.time()

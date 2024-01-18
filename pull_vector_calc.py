@@ -14,7 +14,8 @@ def y(pt, eta, m):
 
 
 
-#the eta cut key differentiates the following cases: eta_cut_key==0 no eta cuts,  eta_cut_key==1 endcap region, eta_cut_key==-1 barrel region
+#the eta cut key differentiates the following cases: eta_cut_key==0 no eta cuts,  eta_cut_key==1 endcap region
+# , eta_cut_key==-1 barrel region, eta_cut_key == 2  eta > leading_eta_cut, eta_cut_key == -2  eta < -leading_eta_cut
 def pv(path, leading_pt_cut, subleading_pt_cut, leading_eta_cut, eta_cut_key, dau_pt_cuts = 0):
     
         
@@ -64,6 +65,16 @@ def pv(path, leading_pt_cut, subleading_pt_cut, leading_eta_cut, eta_cut_key, da
         eta_cut=eta_cut_high*eta_cut_low
 
         comb_gen_mask = dau_mask_gen*jet_pt_mask_leading*jet_pt_mask_subleading*eta_cut
+        
+    if eta_cut_key == 2:
+        eta_cut_high = ak.flatten(data['Events']['GenJets_eta'].array()[nonzero_gen][leading_gen]>leading_eta_cut)
+        comb_gen_mask = dau_mask_gen*jet_pt_mask_leading*jet_pt_mask_subleading*eta_cut_high
+        
+    if eta_cut_key == -2:
+        eta_cut_low = ak.flatten(data['Events']['GenJets_eta'].array()[nonzero_gen][leading_gen]<-leading_eta_cut)
+        comb_gen_mask = dau_mask_gen*jet_pt_mask_leading*jet_pt_mask_subleading*eta_cut_low
+
+
     if eta_cut_key == 0:
         comb_gen_mask = dau_mask_gen*jet_pt_mask_leading*jet_pt_mask_subleading
     
@@ -180,7 +191,34 @@ def pv(path, leading_pt_cut, subleading_pt_cut, leading_eta_cut, eta_cut_key, da
     pull_vector_y_subleading = sum_y_subleading/jet_pt_gen_subleading
     pull_vector_phi_subleading = sum_phi_subleading/jet_pt_gen_subleading
     
-    x=[jet_phi_gen_leading,sum_y_leading,sum_phi_leading]   #put here every variable that you want to be outputted
+    
+    j_leading=vector.array({
+                        "x" : y_jet_gen_leading[leading_dau_mask*subleading_dau_mask],
+                        "y": jet_phi_gen_leading[leading_dau_mask*subleading_dau_mask]                
+                        })
+    
+    j_subleading=vector.array({
+                        "x" : y_jet_gen_subleading[leading_dau_mask*subleading_dau_mask],
+                        "y": jet_phi_gen_subleading[leading_dau_mask*subleading_dau_mask]   
+                        })
+    
+    pull_vector_leading = vector.array({
+                        "x" : pull_vector_y_leading[leading_dau_mask*subleading_dau_mask],
+                        "y": pull_vector_phi_leading[leading_dau_mask*subleading_dau_mask]
+                        })
+    
+    pull_vector_subleading = vector.array({
+                        "x" : pull_vector_y_subleading[leading_dau_mask*subleading_dau_mask],
+                        "y": pull_vector_phi_subleading[leading_dau_mask*subleading_dau_mask]
+                        })
+    
+    v12 = j_subleading-j_leading
+    v21 = j_leading - j_subleading
+    
+    leading_relative_pa=v12.deltaphi(pull_vector_leading)
+    subleading_relative_pa=v21.deltaphi(pull_vector_subleading)
+    
+    x=[leading_relative_pa,subleading_relative_pa,sum_phi_leading]   #put here every variable that you want to be outputted
         
     return pull_vector_y_leading[leading_dau_mask],pull_vector_phi_leading[leading_dau_mask],pull_vector_y_subleading[subleading_dau_mask],pull_vector_phi_subleading[subleading_dau_mask], x
 
